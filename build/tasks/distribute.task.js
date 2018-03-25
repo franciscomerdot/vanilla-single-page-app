@@ -1,7 +1,8 @@
 const rollup = require('rollup'),
       rollupTypescript = require('rollup-plugin-typescript2'),
       rollupHtml = require('rollup-plugin-html'),
-      os = require('os')
+      gulpConcat = require('gulp-concat'),
+      os = require('os');
 
 const rollupTypescriptOptions = {
     cacheRoot: os.tmpdir(),
@@ -41,8 +42,13 @@ module.exports = function configureGulp(gulp) {
                         gulp.src(['./src/app/index.html'])
                             .pipe(gulp.dest('./dist/'))
                      ).then(
-                        gulp.src(['./src/app/vendor/**/*'])
-                            .pipe(gulp.dest('./dist/vendor'))
+                        gulp.src(['./src/app/vendor/**/*.js'])
+                            .pipe(gulpConcat({ path: 'vendor.js' }))
+                            .pipe(gulp.dest('./dist/'))
+                     ).then(
+                        gulp.src(['./src/app/styles/**/*.css'])
+                            .pipe(gulpConcat({ path: 'styles.css' }))
+                            .pipe(gulp.dest('./dist/'))
                      );
     }
 }
