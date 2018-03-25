@@ -1,0 +1,30 @@
+{
+  "name": "vanilla-single-page-app",
+  "version": "0.0.1",
+  "description": "A vanilla single page application with no frameworks or css libraries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franciscomerdot/vanilla-single-page-app.git"
+  },
+  "keywords": [
+    "single",
+    "page",
+    "vanilla",
+    "html"
+  ],
+  "author": "Francisco Mercedes <franciscomerdot@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/franciscomerdot/vanilla-single-page-app/issues"
+  },
+  "homepage": "https://github.com/franciscomerdot/vanilla-single-page-app#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^5.0.0",
+    "typescript": "^2.7.2"
+  }
+}
