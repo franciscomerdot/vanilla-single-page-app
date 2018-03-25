@@ -10,6 +10,7 @@ const componentRendererFactory: ComponentRendererFactory = new BuildInComponentR
 const componentRenderer: ComponentRenderer = componentRendererFactory.createComponentRenderer([
   new components.MainComponent(),
   new components.NavBarComponent(),
+  new components.BreadcrumbComponent(),
   // Put components here so componetize can render those :).
 ]);
 

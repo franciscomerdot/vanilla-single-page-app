@@ -102,8 +102,6 @@ export class BuildInComponentRenderer implements ComponentRenderer {
     const baseElement: Element = document.createElement('div');
     baseElement.innerHTML = component.template;
 
-    console.log(baseElement.children);
-
     Array.from(baseElement.children).forEach(childElement =>
       this.parseElementChildElements(childElement, component),
     );

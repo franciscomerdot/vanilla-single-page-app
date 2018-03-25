@@ -1,0 +1,19 @@
+* {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.center {
+    max-width: 1090px;
+    margin: 0 auto;
+}
+
+.section {
+    padding: 5px
+}
+
+.right {
+    float: right;
+}
+
+.brand-color, a, fa {
+    color: green
+}
