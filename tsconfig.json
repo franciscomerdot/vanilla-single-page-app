@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "lib": ["es6", "dom", "dom.iterable"],
+        "target": "es5",
+        "module": "es2015",
+    },
+    "files": [
+        "src/componetize/definitions/htmlContent.d.ts"
+    ],
+    "exclude": [
+        "bin/**/*",
+        "dist/**/*",
+        "node_modules/**/*"
+    ]
+}
