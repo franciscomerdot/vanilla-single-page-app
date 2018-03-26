@@ -12,7 +12,6 @@ const componentRenderer: ComponentRenderer = componentRendererFactory.createComp
   new components.NavBarComponent(),
   new components.BreadcrumbComponent(),
   new components.CardComponent(),
-  new components.CardCollectionComponent(),
   new components.AcordionComponent(),
   new components.UserFormComponent(),
   new components.UserListComponent(),
