@@ -26,4 +26,9 @@ export interface Component {
    * Get a boolean value specifiying if the component accept other element as content.
    */
   acceptContent?: boolean;
+
+  /**
+   * Represents the context function to be used for data manipulation.
+   */
+  context?: Function;
 }

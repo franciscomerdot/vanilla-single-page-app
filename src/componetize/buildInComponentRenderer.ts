@@ -1,7 +1,8 @@
-import { Component, ComponentRenderer } from './domain/index';
+import { Component, ComponentRenderer, ComponentContext } from './domain/index';
 
 const privateScope: WeakMap<BuildInComponentRenderer, {
   components: Component[],
+  placeHolderRegex: RegExp
 }> = new WeakMap();
 
 /**
@@ -13,6 +14,7 @@ export class BuildInComponentRenderer implements ComponentRenderer {
     components.forEach(component => this.validateComponent(component));
     privateScope.set(this, {
       components: components || [],
+      placeHolderRegex: /\[\((.|[^\(]|[^\)]*)\)\]/gmi,
     });
   }
 
@@ -41,7 +43,7 @@ export class BuildInComponentRenderer implements ComponentRenderer {
       );
     }
 
-    Array.from(documentElements).forEach(element => this.parseElementChildElements(element));
+    Array.from(documentElements).forEach(element => this.parseElementChildElements(element, null));
   }
 
   /**
@@ -78,61 +80,143 @@ export class BuildInComponentRenderer implements ComponentRenderer {
     return !!component;
   }
 
-  private parseElementChildElements(element: Element, containingComponent?: Component): void {
+  private parseElementChildElements(element: Element, containingComponentContext: ComponentContext): void {
 
-    let componentData: string = '';
+    let elementHtml: string = element.innerHTML;
 
     Array.from(element.children).forEach((childElement) => {
-      // Recursively parching each element in the document.
+      // Recursively parsing each element in the document.
       // Yes, I should take care about performance.
-      this.parseElementChildElements(childElement, containingComponent);
 
-      componentData += childElement.outerHTML;
+      let shouldRender: boolean =
+        childElement.hasAttribute('renderIf') ?
+          this.resolveExpressionWithComponentContext(
+            childElement.getAttribute('renderIf'),
+            element.localName,
+            containingComponentContext
+          ) : true;
+        
+      if (shouldRender) {
+        this.parseElementChildElements(childElement, containingComponentContext);
+        elementHtml += childElement.outerHTML;
+      }
     });
 
-    // If the selector is a component render it below the elements.
     if (this.hasComponentWithSelector(element.localName)) {
-      element.innerHTML =
-        this.getCompiledHtmlFromComponent(
-          this.getComponentWithSelector(element.localName),
-          containingComponent,
-          componentData,
-        );
+      let component: Component = this.getComponentWithSelector(element.localName);
+      let componentContext: ComponentContext;
+
+      if (component.context) {
+        if (typeof component.context !== 'function') {
+          throw new Error(`Can not instantiate the component ${component.name} context because is not a function`);
+        }
+
+        componentContext = new (<any>component.context)();
+      }
+
+      component.bridgeProperties.forEach((property) => {
+        let propertyContent: string = element.getAttribute(property);
+
+          componentContext[property] =
+            propertyContent ?
+              this.resolveExpressionWithComponentContext(propertyContent, component.name, containingComponentContext) :
+              undefined;  
+      });
+
+      element.innerHTML = this.getCompiledHtmlFromComponent(component, componentContext, elementHtml);
+    } else {
+      element.innerHTML = elementHtml;
     }
   }
 
   private getCompiledHtmlFromComponent(
     component: Component,
-    containingComponent: Component,
-    containingData: string,
+    componentContext: ComponentContext,
+    elementHtml: string,
   ): string {
 
-    if (!component.acceptContent && containingData) {
+    if (!component.acceptContent && elementHtml) {
       throw new Error(`Can not compile component [${component.name}], ` +
         'because has content when it does not accept it.');
     }
 
     const baseElement: Element = document.createElement('div');
-    baseElement.innerHTML = component.template;
+    baseElement.innerHTML = this.getNormalizeTemplateFromComponent(component, componentContext);
 
-    const compontizeContainerElements = baseElement.getElementsByTagName('compontize-container');
-    
-    if (containingData) {
+    const compontizeContainerElements = baseElement.getElementsByTagName('componetize-container');
+
+    if (elementHtml) {
       if (compontizeContainerElements.length !== 1) {
         throw new Error(
           `Can not compile component [${component.name}], because has ` +
           `[${compontizeContainerElements.length}] componetize-contaner when it must be 1`,
         );
       }
-      
+
       compontizeContainerElements.item(0).setAttribute('style', 'with:100%');
-      compontizeContainerElements.item(0).innerHTML = containingData;
+      compontizeContainerElements.item(0).innerHTML = elementHtml;
     }
 
     Array.from(baseElement.children).forEach(childElement =>
-      this.parseElementChildElements(childElement, component),
+      this.parseElementChildElements(childElement, componentContext),
     );
 
     return baseElement.innerHTML;
+  }
+
+  private getNormalizeTemplateFromComponent(
+    component: Component,
+    componentContext: ComponentContext
+  ): string {
+    let normalizeTemplate: string = component.template;
+    let match = normalizeTemplate.match(privateScope.get(this).placeHolderRegex);
+
+    if (match) {
+      match.forEach((expression) => {
+        let expressionContent = expression.substr(2, expression.length - 4);
+
+        normalizeTemplate =
+          normalizeTemplate.split(expression)
+            .join(
+              this.resolveExpressionWithComponentContext(expressionContent, component.name, componentContext)
+            )
+      })
+    }
+
+    return normalizeTemplate;
+  }
+
+  private resolveExpressionWithComponentContext(expression: string, componentOrElement: string, componentContext: ComponentContext): any {
+    let expressionContext: string = '';
+
+    if (componentContext) {
+      expressionContext = Object.keys(componentContext).map(key => `var ${key} = componentContext.${key};`).join('\n');
+    }
+
+    let expressionResolver =
+      `
+          var componentContext = this;
+          return(           
+            function(){ 
+              ${expressionContext}
+              var __result = ${expression};
+
+              if (__result === undefined) {
+                return 'undefined';
+              } else if (__result === null) {
+                return 'null';
+              } else {
+                return __result;
+              }                
+            }
+          )                
+        `;
+
+    try {
+      // Function just like eval :( -> please good, kill me now.
+      return Function(expressionResolver).bind(componentContext)()();
+    } catch (error) {
+      throw new Error(`Can not render component or element [${componentOrElement}] due error \n\n` + error)
+    }
   }
 }
