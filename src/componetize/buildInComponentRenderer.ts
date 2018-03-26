@@ -8,7 +8,7 @@ const privateScope: WeakMap<BuildInComponentRenderer, {
  * Represents a renderer that render components.
  */
 export class BuildInComponentRenderer implements ComponentRenderer {
-  
+
   constructor(components: Component[]) {
     components.forEach(component => this.validateComponent(component));
     privateScope.set(this, {
@@ -27,7 +27,7 @@ export class BuildInComponentRenderer implements ComponentRenderer {
   */
   public renderDocumentElementsWithName(documentElementName: string) {
     const documentElements: NodeListOf<Element> =
-        document.getElementsByTagName(documentElementName);
+      document.getElementsByTagName(documentElementName);
 
     if (!this.hasComponentWithSelector(documentElementName)) {
       throw new Error(
@@ -37,7 +37,7 @@ export class BuildInComponentRenderer implements ComponentRenderer {
 
     if (!documentElements.length) {
       throw new Error(
-          `Can not find any element with the provided element name [${documentElementName}]`,
+        `Can not find any element with the provided element name [${documentElementName}]`,
       );
     }
 
@@ -78,29 +78,56 @@ export class BuildInComponentRenderer implements ComponentRenderer {
     return !!component;
   }
 
-  private parseElementChildElements(element: Element, cotaininComponent?: Component): void {
+  private parseElementChildElements(element: Element, containingComponent?: Component): void {
+
+    let componentData: string = '';
+
     Array.from(element.children).forEach((childElement) => {
       // Recursively parching each element in the document.
       // Yes, I should take care about performance.
-      this.parseElementChildElements(childElement, cotaininComponent);
+      this.parseElementChildElements(childElement, containingComponent);
+
+      componentData += childElement.outerHTML;
     });
 
     // If the selector is a component render it below the elements.
     if (this.hasComponentWithSelector(element.localName)) {
       element.innerHTML =
         this.getCompiledHtmlFromComponent(
-          this.getComponentWithSelector(element.localName), cotaininComponent,
+          this.getComponentWithSelector(element.localName),
+          containingComponent,
+          componentData,
         );
     }
   }
 
   private getCompiledHtmlFromComponent(
-      component: Component,
-      cotaininComponent: Component,
-    ): string {
-    
+    component: Component,
+    containingComponent: Component,
+    containingData: string,
+  ): string {
+
+    if (!component.acceptContent && containingData) {
+      throw new Error(`Can not compile component [${component.name}], ` +
+        'because has content when it does not accept it.');
+    }
+
     const baseElement: Element = document.createElement('div');
     baseElement.innerHTML = component.template;
+
+    const compontizeContainerElements = baseElement.getElementsByTagName('compontize-container');
+    
+    if (containingData) {
+      if (compontizeContainerElements.length !== 1) {
+        throw new Error(
+          `Can not compile component [${component.name}], because has ` +
+          `[${compontizeContainerElements.length}] componetize-contaner when it must be 1`,
+        );
+      }
+      
+      compontizeContainerElements.item(0).setAttribute('style', 'with:100%');
+      compontizeContainerElements.item(0).innerHTML = containingData;
+    }
 
     Array.from(baseElement.children).forEach(childElement =>
       this.parseElementChildElements(childElement, component),

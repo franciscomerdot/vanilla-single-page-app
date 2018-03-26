@@ -11,6 +11,12 @@ const componentRenderer: ComponentRenderer = componentRendererFactory.createComp
   new components.MainComponent(),
   new components.NavBarComponent(),
   new components.BreadcrumbComponent(),
+  new components.CardComponent(),
+  new components.CardCollectionComponent(),
+  new components.AcordionComponent(),
+  new components.UserFormComponent(),
+  new components.UserListComponent(),
+  new components.InformativeInputComponent(),
   // Put components here so componetize can render those :).
 ]);
 

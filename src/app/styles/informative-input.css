@@ -1,0 +1,24 @@
+informative-input {
+   margin: 2px;
+}
+
+informative-input label {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+
+informative-input input[type=text] {
+    width: 100%;
+    border-radius: 3px 3px;
+    height: 25px;
+    border: 0;
+    box-shadow: 0 0 3px lightgray;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+informative-input input[type=checkbox] {
+    width: 25px;
+    height: 25px;
+    border-radius: 3px 3px;
+}

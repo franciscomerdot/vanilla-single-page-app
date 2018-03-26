@@ -1,0 +1,11 @@
+card {
+    display: inline-block;    
+}
+
+card .title {
+    color: lightgray
+}
+
+card-collection card {
+    margin-left: 20px;
+}

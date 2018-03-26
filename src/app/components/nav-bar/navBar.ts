@@ -6,10 +6,6 @@ export class NavBarComponent implements Component {
   public get name(): string  { return 'Navigation Bar'; }
   public get template(): string   { return navBarHtml; }
   public get bridgeProperties(): string[]   { 
-    return [
-      'applicationName',
-    ]; 
+    return []; 
   }
-
-  public applicationName: string;
 }

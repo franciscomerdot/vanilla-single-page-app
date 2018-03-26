@@ -21,4 +21,9 @@ export interface Component {
    * Get the component properties that can be assigned or read from others components.
    */
   bridgeProperties: string[];
+
+  /**
+   * Get a boolean value specifiying if the component accept other element as content.
+   */
+  acceptContent?: boolean;
 }
