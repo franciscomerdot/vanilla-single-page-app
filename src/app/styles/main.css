@@ -20,12 +20,20 @@ body {
 }
 
 .section {
-    padding: 5px;
+    padding: 10px;
     display: flow-root;
 }
 
 .space-up {
     padding-top: 40px;
+}
+
+.space-left {
+    padding-left: 40px;
+}
+
+.space-right {
+    padding-right: 40px;
 }
 
 .space-down {

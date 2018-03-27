@@ -11,17 +11,30 @@
 <div class="section contrast-background">
     <div class="center content">
         <div class="left">
-            <card-collection></card-collection>
+            <card 
+                class="space-right"
+                repeatFor="[{icon: 'puzzle-piece', title: 'Sector', desc: 'Sports'}, {icon: 'futbol', title: 'Sport Type', desc: 'Bicycles'}, {icon: 'bicycle', title: 'Mode', desc: 'Mountain Cross'}]"
+                repeatItem="item" 
+                fontAwsomeIcon="item.icon"
+                brandColor="'secondary'"
+                title="item.title"
+                description="item.desc">
+            </card>    
         </div>
         <div class="right">
-            <card></card>
+            <card
+                fontAwsomeIcon="'recycle'"
+                brandColor="'primary'"
+                title="'Responsability'"
+                description="'Be Green!'">
+            </card>
         </div>
     </div>
 </div>
 <div class="section">
     <div class="center">
         <div class="section space-up">
-            <acordion title="'Help'" isOpen="false">
+            <acordion title="'Help'" isOpen="true">
                 <div class="section content">
                     <div class="left element secondary-brand-color">
                         <i class="far fa-7x fa-life-ring"></i>
