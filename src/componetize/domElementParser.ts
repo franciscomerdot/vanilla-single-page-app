@@ -16,7 +16,7 @@ export class  DomElementParser {
     privateScope.set(this, {
       componentRepository,
       domElementExpressionResolver,
-      placeHolderRegex: /\[\((.|[^\(]|[^\)]*)\)\]/gmi,
+      placeHolderRegex: /\[\((.|[^\]|[^]*)\)\]/gmi,
     });
   }
 
@@ -98,7 +98,8 @@ export class  DomElementParser {
     const repeaters = baseElement.querySelectorAll('[repeatFor]');
     
     Array.from(repeaters).forEach((repeater, index) => {
-      const placeHolderElement = document.createElement('repeater-' + index);
+      const placeHolderElement = document.createElement(repeater.localName);
+      placeHolderElement.className = 'repeater-' + index;
       repeater.parentElement.setAttribute('repeater-' + index, 'repeatFor:');
       repeater.parentElement.replaceChild(placeHolderElement, repeater);
     });
@@ -111,7 +112,7 @@ export class  DomElementParser {
 
     repeaters.forEach((repeater, index) => {
       const parent: Element = baseElement.querySelectorAll('[repeater-' + index + ']').item(0);
-      const placeHolder: Element = baseElement.getElementsByTagName('repeater-' + index).item(0);
+      const placeHolder: Element = baseElement.getElementsByClassName('repeater-' + index).item(0);
       parent.replaceChild(repeater, placeHolder);
     });
 
@@ -180,8 +181,9 @@ export class  DomElementParser {
     (<any[]>collection).forEach((collectionItem, index) => {
       const iterationElement: Element = <Element>element.cloneNode(true);
       const iterationContext: any = {};
-      Object.keys(containingComponentContext)
-            .forEach(key => iterationContext[key] = containingComponentContext[key]);
+      for (const key in containingComponentContext) {
+        iterationContext[key] = containingComponentContext[key];
+      }
       iterationContext[collectionItemIentifier] = collectionItem;
       iterationContext['__index'] = index;
      

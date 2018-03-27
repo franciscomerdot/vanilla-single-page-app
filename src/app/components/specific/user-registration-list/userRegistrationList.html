@@ -1,0 +1,35 @@
+<div>
+    <h2>Bikers</h2>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th align="left">Full Name</th>
+                <th align="left">Email</th>
+                <th align="left">City</th>
+                <th align="left">Ride in Group</th>
+                <th align="left">Day of the Week</th>
+                <th align="left">Registration Day</th>
+                <th align="left"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeatFor="users" repeatItem="user" class="contrast-background">
+                <td>[(user.fullName)]</td>
+                <td>[(user.email)]</td>
+                <td>[(user.city)]</td>
+                <td>[(user.ridePreferences)]</td>
+                <td>[(getNormalizedDaysOfTheWeek(user.daysOfTheWeek))]</td>
+                <td>
+                    <span>[(user.registrationDate.toLocaleDateString())]</span>
+                    <small>[(user.registrationDate.toLocaleTimeString())]</small>
+                </td>
+                <td>
+                    <a class="right secondary-brand-color">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>            
+        </tbody>
+    </table>
+
+</div>

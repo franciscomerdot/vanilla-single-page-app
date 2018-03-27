@@ -39,6 +39,11 @@ body {
     margin-bottom: 40px;
 }
 
+.section {
+    padding: 10px;
+    display: flow-root;
+}
+
 .content {
     padding: 15px;
     display: flow-root;
@@ -61,14 +66,7 @@ body {
 }
 
 .half {
-    width: 50%;
-    float: left;
-}
-
-.half-spaced {
-    padding: 2%;
-    width: 46%;
-    float: left;
+    width: 45%;
 }
 
 .full {

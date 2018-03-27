@@ -4,12 +4,17 @@ informative-input {
 
 informative-input label {
     font-weight: bold;
-    margin-bottom: 1px;
+    margin-bottom: 5px;
+}
+
+informative-input input:focus {
+    border-color: gree,
 }
 
 informative-input input[type=text] {
     width: 100%;
     border-radius: 3px 3px;
+    padding: 5px;
     height: 25px;
     border: 0;
     box-shadow: 0 0 3px lightgray;
@@ -21,4 +26,12 @@ informative-input input[type=checkbox] {
     width: 25px;
     height: 25px;
     border-radius: 3px 3px;
+    cursor: pointer;
+}
+
+informative-input input[type=radio] {
+    width: 25px;
+    height: 25px;
+    border-radius: 3px 3px;
+    cursor: pointer;
 }
