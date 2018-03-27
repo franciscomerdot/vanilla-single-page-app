@@ -9,6 +9,8 @@ import * as components from './components/index';
 const componentRendererFactory: ComponentRendererFactory = new BuildInComponentRendererFactory();
 const componentRenderer: ComponentRenderer = componentRendererFactory.createComponentRenderer([
   new components.MainComponent(),
+  new components.PathComponent(),
+  new components.HelpComponent(),
   new components.NavBarComponent(),
   new components.BreadcrumbComponent(),
   new components.CardComponent(),

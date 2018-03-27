@@ -6,6 +6,8 @@ export class BreadcrumbComponent implements Component {
   public get name(): string  { return 'Breadcrumb'; }
   public get template(): string   { return breadcrumbHtml; }
   public get bridgeProperties(): string[]   { 
-    return []; 
+    return [
+      'items',
+    ]; 
   }
 }

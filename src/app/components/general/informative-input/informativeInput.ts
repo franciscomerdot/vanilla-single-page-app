@@ -1,5 +1,6 @@
 import { Component } from '../../../../componetize/index';
 import informativeInputHtml from './informativeInput.html';
+import { InformativeInputContext } from './informativeInputContext';
 
 export class InformativeInputComponent implements Component {
   public get selector(): string { return 'informative-input'; }
@@ -7,6 +8,10 @@ export class InformativeInputComponent implements Component {
   public get template(): string   { return informativeInputHtml; }
   public get acceptContent(): boolean { return true; }
   public get bridgeProperties(): string[]   { 
-    return []; 
+    return [
+      'label',
+      'conitionsMap',
+    ]; 
   }
+  public get context(): Function { return InformativeInputContext; }
 }

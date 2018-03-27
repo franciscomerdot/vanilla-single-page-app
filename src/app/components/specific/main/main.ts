@@ -1,5 +1,6 @@
 import { Component } from '../../../../componetize/index';
 import mainHtml from './main.html';
+import { MainContext } from './mainContext';
 
 export class MainComponent implements Component {
   public get selector(): string { return 'main'; }
@@ -8,4 +9,5 @@ export class MainComponent implements Component {
   public get bridgeProperties(): string[]   { 
     return []; 
   }  
+  public get context(): Function { return MainContext; }
 }

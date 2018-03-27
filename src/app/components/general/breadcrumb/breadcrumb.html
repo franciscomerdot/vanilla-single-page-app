@@ -1,21 +1,15 @@
 <div>
-    <span>
-        <i class="fa fa-home primary-brand-color"></i>
-    </span>
-    <span>
-        <i class="fa fa-angle-right primary-brand-color"></i>
-    </span>
-    <a>
-        <small>Page 1</small>
+    <a repeatFor="items" 
+       repeatItem="breadcrumbItem"
+       click="breadcrumbItem.action()">
+        <span renderIf="breadcrumbItem.fontAwsomeIcon">
+            <i class="fa fa-[(breadcrumbItem.fontAwsomeIcon)]"></i>
+        </span>
+        <span renderIf="breadcrumbItem.description">
+            <small class="">[(breadcrumbItem.description)]</small>
+        </span>
+        <span renderIf="__index < (items.length - 1)">
+            <i class="fa fa-angle-right primary-brand-color"></i>
+        </span>
     </a>
-    <span>
-        <i class="fa fa-angle-right primary-brand-color"></i>
-    </span>
-    <a>
-        <small>Breadcrumb</small>
-    </a>
-    <span>
-        <i class="fa fa-angle-right primary-brand-color"></i>
-    </span>
-    <small>Custom Page</small>
 </div>

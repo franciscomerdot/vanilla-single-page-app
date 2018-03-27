@@ -19,14 +19,7 @@ export class DomElementExpressionResolver {
           function(){ 
             ${expressionContext}
             var __result = ${expression};
-    
-            if (__result === undefined) {
-              return 'undefined';
-            } else if (__result === null) {
-              return 'null';
-            } else {
-             return __result;
-            }        
+            return __result;
           }
         )`;
   

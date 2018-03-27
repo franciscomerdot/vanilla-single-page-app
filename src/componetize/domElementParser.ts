@@ -29,7 +29,7 @@ export class  DomElementParser {
     const childElements: Element[] = [];
     
     Array.from(element.children).forEach((childElement) => {
-        // Recursively parsing each element in the document.  
+      // Recursively parsing each element in the document.  
       if (!this.canElementBeRendered(childElement, containingComponentContext)) {
         element.removeChild(childElement);
       } else {
@@ -59,18 +59,18 @@ export class  DomElementParser {
   
       component.bridgeProperties.forEach((property) => {
         const propertyContent: string = element.getAttribute(property);
-  
-        componentContext[property] =
-            propertyContent ?
-            scope.domElementExpressionResolver.resolveExpression(
-              propertyContent,
-              component.name,
-              containingComponentContext,
-            ) :
-        undefined;  
+
+        if (propertyContent) {  
+          componentContext[property] =
+              scope.domElementExpressionResolver.resolveExpression(
+                propertyContent,
+                component.name,
+                containingComponentContext,
+              ) ;
+        } 
       });  
       
-      const fromTemplateElements: Element[] = this.getCompiledHtmlFromComponent(
+      const fromTemplateElements: Element[] = this.getElementsFromComponent(
         component,
         componentContext,
         Array.from(element.children),
@@ -82,18 +82,38 @@ export class  DomElementParser {
     }
   }
 
-  private getCompiledHtmlFromComponent(
+  private getElementsFromComponent(
     component: Component,
     componentContext: ComponentContext,
     elements: Element[],
   ): Element[] {
     if (!component.acceptContent && elements.length) {
       throw new Error(`Can not compile component [${component.name}], ` +
-        'because has content when it does not accept it.');
+                      'because has content when it does not accept it.');
     }
 
     const baseElement: Element = document.createElement('div');
-    baseElement.innerHTML = this.getNormalizeTemplateFromComponent(component, componentContext);
+    baseElement.innerHTML = component.template;
+
+    const repeaters = baseElement.querySelectorAll('[repeatFor]');
+    
+    Array.from(repeaters).forEach((repeater, index) => {
+      const placeHolderElement = document.createElement('repeater-' + index);
+      repeater.parentElement.setAttribute('repeater-' + index, 'repeatFor:');
+      repeater.parentElement.replaceChild(placeHolderElement, repeater);
+    });
+
+    baseElement.innerHTML = this.getNormalizeTemplate(
+      baseElement.innerHTML,
+      component.name,
+      componentContext,
+    );
+
+    repeaters.forEach((repeater, index) => {
+      const parent: Element = baseElement.querySelectorAll('[repeater-' + index + ']').item(0);
+      const placeHolder: Element = baseElement.getElementsByTagName('repeater-' + index).item(0);
+      parent.replaceChild(repeater, placeHolder);
+    });
 
     const compontizeContainerElements = baseElement.getElementsByTagName('componetize-container');
 
@@ -150,19 +170,35 @@ export class  DomElementParser {
     const collectionItemIentifier = element.getAttribute('repeatItem');
     
     if (!(collection instanceof Array)) {
-      throw new Error('Shoud provide an array fo iterations in element.' + element.localName);
+      throw new Error('Should provide an array for iterations in element.' + element.localName);
     }
 
     if (!collectionItemIentifier) {
-      throw new Error('Shoud provide repeatItem for element. ->' + element.localName);
+      throw new Error('Should provide repeatItem for element. ->' + element.localName);
     }
 
     (<any[]>collection).forEach((collectionItem, index) => {
-      const iterationElement: Element = <Element>element.cloneNode();
+      const iterationElement: Element = <Element>element.cloneNode(true);
       const iterationContext: any = {};
+      Object.keys(containingComponentContext)
+            .forEach(key => iterationContext[key] = containingComponentContext[key]);
       iterationContext[collectionItemIentifier] = collectionItem;
       iterationContext['__index'] = index;
-      iterationContext.__proto__ = containingComponentContext;
+     
+      iterationElement.innerHTML = this.getNormalizeTemplate(
+        iterationElement.innerHTML,
+        iterationElement.localName,
+        iterationContext,
+      );
+
+      Array.from(iterationElement.attributes).forEach((attribute) => {
+        attribute.value = this.getNormalizeTemplate(
+          attribute.value,
+          iterationElement.localName,
+          iterationContext,
+        );
+      });
+
       this.parsedElement(iterationElement, iterationContext);
       parsedElements.push(iterationElement);
     });
@@ -170,14 +206,15 @@ export class  DomElementParser {
     return parsedElements;
   }
 
-  private getNormalizeTemplateFromComponent(
-    component: Component,
+  private getNormalizeTemplate(
+    template: string,
+    componentOrElement: string,
     componentContext: ComponentContext,
   ): string {
     const scope = privateScope.get(this);
-    const match = component.template.match(scope.placeHolderRegex);
+    const match = template.match(scope.placeHolderRegex);
 
-    let normalizeTemplate: string = component.template;    
+    let normalizeTemplate: string = template;    
 
     if (match) {
       match.forEach((expression) => {
@@ -188,7 +225,7 @@ export class  DomElementParser {
             .join(
               scope.domElementExpressionResolver.resolveExpression(
                 expressionContent,
-                component.name,
+                componentOrElement,
                 componentContext,
               ),
             );
