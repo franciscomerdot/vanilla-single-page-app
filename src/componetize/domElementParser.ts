@@ -1,10 +1,12 @@
 import { ComponentContext, Component } from '.';
 import { DomElementExpressionResolver } from './domElementExpressionResolver';
 import { ComponentRepository } from './domain/componentRepository';
+import { DomElmentDecorator } from './domain/domElementDecorator';
 
 const privateScope: WeakMap<DomElementParser, {
   componentRepository: ComponentRepository,
   domElementExpressionResolver: DomElementExpressionResolver,
+  domElementDecorators: DomElmentDecorator[]
   placeHolderRegex: RegExp,
 }> = new WeakMap();
 
@@ -12,10 +14,12 @@ export class  DomElementParser {
   constructor(    
     componentRepository: ComponentRepository,
     domElementExpressionResolver: DomElementExpressionResolver,
+    domElementDecorators: DomElmentDecorator[],
   )  {
     privateScope.set(this, {
       componentRepository,
       domElementExpressionResolver,
+      domElementDecorators,
       placeHolderRegex: /\[\((.|[^\]|[^]*)\)\]/gmi,
     });
   }
@@ -42,6 +46,14 @@ export class  DomElementParser {
         }
       }
     });
+
+    scope.domElementDecorators.forEach(elementDecorator =>
+      elementDecorator.attributes.forEach((attribute) => {
+        if (element.hasAttribute(attribute)) {
+          elementDecorator.decorateElement(attribute, element, containingComponentContext);
+        }
+      }),
+    );
   
     if (scope.componentRepository.hasComponentWithSelector(element.localName)) {
       const component: Component =
@@ -78,7 +90,7 @@ export class  DomElementParser {
 
       element.innerHTML = '';
 
-      fromTemplateElements.forEach(childElement => element.appendChild(childElement));
+      fromTemplateElements.forEach(childElement => element.appendChild(childElement));            
     }
   }
 

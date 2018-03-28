@@ -1,5 +1,5 @@
 <div>
-    <h2>Bikers</h2>
+    <h1>Bikers</h1>
     <table style="width:100%">
         <thead>
             <tr>
@@ -13,7 +13,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr repeatFor="users" repeatItem="user" class="contrast-background">
+            <tr repeatFor="users" 
+                repeatItem="user"
+                class="[(__index % 2 ? 'contrast-background' : '')]"
+                mouseenter="setIsHovered(true)"
+                mouseleave="setIsHovered(false)">
                 <td>[(user.fullName)]</td>
                 <td>[(user.email)]</td>
                 <td>[(user.city)]</td>
@@ -21,7 +25,9 @@
                 <td>[(getNormalizedDaysOfTheWeek(user.daysOfTheWeek))]</td>
                 <td>
                     <span>[(user.registrationDate.toLocaleDateString())]</span>
-                    <small>[(user.registrationDate.toLocaleTimeString())]</small>
+                    <small class="secondary-brand-color">
+                        [(user.registrationDate.toLocaleTimeString())]
+                    </small>
                 </td>
                 <td>
                     <a class="right secondary-brand-color">

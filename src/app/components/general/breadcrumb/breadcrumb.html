@@ -5,7 +5,7 @@
         <span renderIf="breadcrumbItem.fontAwsomeIcon">
             <i class="fa fa-[(breadcrumbItem.fontAwsomeIcon)]"></i>
         </span>
-        <span renderIf="breadcrumbItem.description">
+        <span renderIf="breadcrumbItem.description" class="[( (__index === (items.length - 1) ? 'secondary-brand-color' : '') )]">
             <small class="">[(breadcrumbItem.description)]</small>
         </span>
         <span renderIf="__index < (items.length - 1)">

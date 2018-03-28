@@ -10,7 +10,13 @@ export class DomElementExpressionResolver {
   
     if (componentContext) {
       expressionContext =
-       Object.keys(componentContext).map(key => `var ${key} = componentContext.${key};`).join('\n');
+       Object.keys(componentContext).map(key => 
+       `
+          var ${key} = componentContext.${key}.bind ? 
+                         componentContext.${key}.bind(componentContext) :
+                         componentContext.${key};
+       `,
+       ).join('\n');
     }
   
     const expressionResolver =

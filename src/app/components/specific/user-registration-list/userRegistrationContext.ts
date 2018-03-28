@@ -1,6 +1,9 @@
 import { ComponentContext } from '../../../../componetize';
 
 export class UserRegistrationContext implements ComponentContext {
+
+  public isHovered: boolean = false;
+
   public getNormalizedDaysOfTheWeek(daysOfTheWeek: string[]): string {
     if (daysOfTheWeek.length === 7) {
       return 'Every day';
@@ -23,5 +26,9 @@ export class UserRegistrationContext implements ComponentContext {
 
 
     return daysOfTheWeek.join(', ');
+  }
+
+  public setIsHovered(value: boolean) {
+    this.isHovered = value;
   }
 }

@@ -5,6 +5,7 @@ export * from './general/informative-input/informativeInput';
 
 export * from './specific/main/main';
 export * from './specific/nav-bar/navBar';
+export * from './specific/footer/footer';
 export * from './specific/path/path';
 export * from './specific/user-registration/userRegistration';
 export * from './specific/user-registration-help/userRegistrationHelp';

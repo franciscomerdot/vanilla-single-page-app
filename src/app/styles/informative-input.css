@@ -22,6 +22,10 @@ informative-input input[type=text] {
     margin-bottom: 2px;
 }
 
+informative-input reference {
+    padding: 5px;
+}
+
 informative-input input[type=checkbox] {
     width: 25px;
     height: 25px;

@@ -18,6 +18,7 @@ const componentRenderer: ComponentRenderer = componentRendererFactory.createComp
   new components.MainComponent(),
   new components.PathComponent(),  
   new components.NavBarComponent(),
+  new components.FooterComponent(),
   new components.UserRegistrationComponent(),
   new components.UserRegistrationHelpComponent(),
   new components.UserRegistrationFormComponent(),

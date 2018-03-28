@@ -1,6 +1,11 @@
 import { ComponentContext } from '.';
+import { DomElementParser } from '../domElementParser';
 
 export interface DomElmentDecorator {
-  attribute: string;
-  decorateElement(element: Element, componentContext: ComponentContext);
+  attributes: string[];
+  decorateElement(
+    decorationAttribute: string,
+    element: Element,
+    componentContext: ComponentContext,
+  );
 }
