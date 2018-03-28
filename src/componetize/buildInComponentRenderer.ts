@@ -62,11 +62,11 @@ export class BuildInComponentRenderer implements ComponentRenderer {
 
     Array.from(documentElements)
          .forEach((element) => { 
-           const virtualElement = document.createElement(element.localName);
-           scope.domElementParser.parsedElement(virtualElement, {});
-           if (element.innerHTML !== virtualElement.innerHTML) {
-             element.innerHTML = virtualElement.innerHTML;
-           }
+          // const virtualElement = document.createElement(element.localName);
+           scope.domElementParser.parsedElement(element, {});
+          //  if (element.innerHTML !== virtualElement.innerHTML) {
+          //    element.innerHTML = virtualElement.innerHTML;
+          //  }
          });
   }
 

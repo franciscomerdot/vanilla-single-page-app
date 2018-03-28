@@ -39,7 +39,7 @@ export class DomGeneralElmentDecorator implements DomElmentDecorator {
         element.localName,
         componentContext,
       );
-      scope.componentRenderer.renderDocumentElementsWithName('main');
+      // scope.componentRenderer.renderDocumentElementsWithName('main'); TODO: update the UI
     });
 
     if (decorationAttribute === 'click') {
