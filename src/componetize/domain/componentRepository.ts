@@ -1,4 +1,4 @@
-import { Component } from '.';
+import { Component } from './index';
 
 /**
  * Represents a respository that allows store and query components.

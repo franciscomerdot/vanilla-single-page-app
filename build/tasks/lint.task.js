@@ -5,7 +5,7 @@ module.exports = function configureGulp(gulp) {
   gulp.task('lint-ci', ['test-ci'], getLintPipe);
 
   function getLintPipe() {
-    return gulp.src(['./src/**/*', './test/**/*'])
+    return gulp.src(['./src/**/*.ts', './test/**/*.ts'])
                .pipe(tslint({
                     formatter: "stylish",
                     fix: true

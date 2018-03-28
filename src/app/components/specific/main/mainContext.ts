@@ -1,4 +1,4 @@
-import { ComponentContext } from '../../../../componetize';
+import { ComponentContext } from '../../../../componetize/index';
 import { BreadcrumbItem } from '../../general/breadcrumb/breadCrumbItem';
 
 const defaultNavigationAction = () => { alert('Working on it'); };

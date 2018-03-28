@@ -4,8 +4,10 @@
         "target": "es5",
         "module": "es2015",
     },
-    "files": [
-        "src/componetize/definitions/htmlContent.d.ts"
+    "include": [
+        "src/**/*.ts",
+        "src/componetize/definitions/htmlContent.d.ts",
+        "test/**/*.spec.ts",
     ],
     "exclude": [
         "bin/**/*",

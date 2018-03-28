@@ -1,4 +1,4 @@
-import { Component } from '.';
+import { Component } from './index';
 import { ComponentRepository } from './domain/componentRepository';
 
 const privateScope: WeakMap<BuildInComponentRepository, {

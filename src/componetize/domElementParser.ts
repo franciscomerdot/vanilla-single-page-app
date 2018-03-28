@@ -1,4 +1,4 @@
-import { ComponentContext, Component } from '.';
+import { ComponentContext, Component } from './index';
 import { DomElementExpressionResolver } from './domElementExpressionResolver';
 import { ComponentRepository } from './domain/componentRepository';
 import { DomElmentDecorator } from './domain/domElementDecorator';

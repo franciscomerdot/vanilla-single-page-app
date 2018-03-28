@@ -1,5 +1,5 @@
 import { DomElmentDecorator } from '../domain/domElementDecorator';
-import { ComponentContext, ComponentRenderer } from '..';
+import { ComponentContext, ComponentRenderer } from '../index';
 import { DomElementExpressionResolver } from '../domElementExpressionResolver';
 import { DomElementParser } from '../domElementParser';
 

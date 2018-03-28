@@ -1,4 +1,4 @@
-import { ComponentContext } from '../../../../componetize';
+import { ComponentContext } from '../../../../componetize/index';
 import { User } from './user';
 
 export class UserRegistrationContext implements ComponentContext {

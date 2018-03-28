@@ -1,4 +1,4 @@
-import { ComponentContext } from '.';
+import { ComponentContext } from './index';
 
 export class DomElementExpressionResolver {
     

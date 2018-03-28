@@ -1,5 +1,5 @@
-import { ComponentContext } from "../../../../componetize";
-import { PathItem } from "./pathItem";
+import { ComponentContext } from '../../../../componetize/index';
+import { PathItem } from './pathItem';
 
 export class PathContext implements ComponentContext {
   public pathItems: PathItem[] = [
