@@ -4,6 +4,7 @@
   "description": "A vanilla single page application with no frameworks or css libraries.",
   "main": "index.js",
   "scripts": {
+    "setup": "npm i -g gulp-cli && npm install",
     "test": "gulp test"
   },
   "repository": {
